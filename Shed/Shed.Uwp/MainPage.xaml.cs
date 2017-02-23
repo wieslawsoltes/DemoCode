@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Devices.Enumeration;
+using Windows.Devices.Gpio;
+using Windows.Devices.I2c;
 using Windows.Media.SpeechRecognition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -57,9 +60,16 @@ namespace Shed.Uwp
         // garbage collected?
         private SpeechRecognizer recognizer;
 
+        private readonly LiquidCrystal lcd;
+        private GpioPin buttonPin;
+        private GpioPin pirPin;
+
         public MainPage()
         {
             this.InitializeComponent();
+            lcd = Task.Run(StartLcd).Result;
+            InitBacklightButton();
+            InitPirDetection();
         }
         
         private void TurnOnLights(object sender, RoutedEventArgs e)
@@ -106,6 +116,7 @@ namespace Shed.Uwp
             {
                 lastText.Text = text;
                 lastConfidence.Text = $"{args.Result.Confidence} ({args.Result.RawConfidence})";
+                SetLcdText(text, $"{args.Result.Confidence} ({args.Result.RawConfidence})");
             });
             if (args.Result.RawConfidence >= ConfidenceThreshold)
             {
@@ -119,6 +130,74 @@ namespace Shed.Uwp
 #pragma warning restore
                 }
             }
+        }
+
+        private async Task<LiquidCrystal> StartLcd()
+        {
+            var settings = new I2cConnectionSettings(0x27); // See https://arduino-info.wikispaces.com/LCD-Blue-I2C
+            //settings.BusSpeed = I2cBusSpeed.FastMode;                       /* 400KHz bus speed */
+
+            string selector = I2cDevice.GetDeviceSelector();                     /* Get a selector string that will return all I2C controllers on the system */
+            var deviceInfos = await DeviceInformation.FindAllAsync(selector);            /* Find the I2C bus controller devices with our selector string             */
+            var lcd = await I2cDevice.FromIdAsync(deviceInfos[0].Id, settings);
+            return new LiquidCrystal(lcd);
+            // https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library/blob/master/LiquidCrystal_I2C.cpp
+        }
+
+        private void SetLcdText(string row1, string row2)
+        {
+            lcd.Clear();
+            lcd.SetCursorPosition(0, 0);
+            lcd.Print(row1);
+            lcd.SetCursorPosition(0, 1);
+            lcd.Print(row2);
+        }
+
+        private void InitBacklightButton()
+        {
+            var gpio = GpioController.GetDefault();
+
+            // Show an error if there is no GPIO controller
+            if (gpio == null)
+            {
+                lcd.Print("There is no GPIO controller on this device.");
+                return;
+            }
+
+            buttonPin = gpio.OpenPin(5);
+
+            // Check if input pull-up resistors are supported
+            if (buttonPin.IsDriveModeSupported(GpioPinDriveMode.InputPullUp))
+                buttonPin.SetDriveMode(GpioPinDriveMode.InputPullUp);
+            else
+                buttonPin.SetDriveMode(GpioPinDriveMode.Input);
+
+            // Set a debounce timeout to filter out switch bounce noise from a button press
+            buttonPin.DebounceTimeout = TimeSpan.FromMilliseconds(50);
+
+            // Toggle the LCD backlight when we press the button (rising edge is release)
+            buttonPin.ValueChanged += (pin, args) =>
+            {
+                if (args.Edge == GpioPinEdge.FallingEdge)
+                {
+                    Dispatcher.RunIdleAsync(_ => lcd.Backlight = !lcd.Backlight);
+                }
+            };
+
+            lcd.Print("GPIO pins initialized.");
+        }
+
+        private void InitPirDetection()
+        {
+            var gpio = GpioController.GetDefault();
+            pirPin = gpio.OpenPin(17);
+            pirPin.SetDriveMode(GpioPinDriveMode.Input);
+            pirPin.DebounceTimeout = TimeSpan.FromMilliseconds(200);
+            pirPin.ValueChanged += (pin, args) =>
+            {
+                var edge = args.Edge;
+                Dispatcher.RunIdleAsync(_ => pir.Text = edge.ToString());
+            };
         }
     }
 }

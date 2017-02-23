@@ -15,5 +15,6 @@
         <TextBlock x:Name="lastText" Text="(Text)" HorizontalAlignment="Left" Height="32" Margin="98,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="369"/>
         <TextBlock x:Name="lastConfidence" Text="(Confidence)" HorizontalAlignment="Left" Height="32" Margin="98,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="369"/>
         <TextBlock x:Name="lastState" Text="(State)" HorizontalAlignment="Left" Height="32" Margin="33,134,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171"/>
+        <TextBlock x:Name="pir" Text="(PIR)" HorizontalAlignment="Left" Height="32" Margin="33,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171"/>
     </Grid>
 </Page>

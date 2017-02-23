@@ -3,6 +3,14 @@ namespace CSharp7
 {
     class Scratchpad
     {
+        int x;
+
+        public void foo(int x)
+        {
+            this.x = x;
+            this.foo(10);
+        }
+
         static void Main()
         {
         }
