@@ -7,6 +7,7 @@
         xmlns:controls="clr-namespace:VDrumExplorer.Gui.Controls"
         mc:Ignorable="d"
         Classes="WindowStyle"
+        Background="{DynamicResource WindowBackgroundBrush}"
         Title="V-Drum Explorer Home" Height="450" Width="800">
     <Design.DataContext>
         <vmh:ExplorerHomeViewModel/>

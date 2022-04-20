@@ -8,7 +8,8 @@
         Title="Select Destination Kit"
         SizeToContent="WidthAndHeight"
         CanResize="False"
-        Classes="WindowStyle">
+        Classes="WindowStyle"
+        Background="{DynamicResource WindowBackgroundBrush}">
     <Design.DataContext>
         <vmd:CopyKitViewModel/>
     </Design.DataContext>

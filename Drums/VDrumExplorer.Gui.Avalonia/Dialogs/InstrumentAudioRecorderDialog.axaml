@@ -9,7 +9,8 @@
         Title="{Binding Title}"
         Classes="WindowStyle"
         SizeToContent="WidthAndHeight"
-        Closing="Cancel">
+        Closing="Cancel"
+        Background="{DynamicResource WindowBackgroundBrush}">
     <Design.DataContext>
         <vmd:InstrumentAudioRecorderViewModel/>
     </Design.DataContext>

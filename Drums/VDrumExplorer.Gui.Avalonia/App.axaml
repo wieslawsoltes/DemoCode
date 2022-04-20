@@ -1,10 +1,24 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:VDrumExplorer.Gui.Controls"
              x:Class="VDrumExplorer.Gui.App">
     <Application.Styles>
-        <FluentTheme Mode="Light"/>
+        <!--<FluentTheme Mode="Light"/>-->
+        <FluentTheme Mode="Dark"/>
+        <Style>
+            <Style.Resources>
+                <!-- Light -->
+                <!--<SolidColorBrush x:Key="WindowBackgroundBrush">#F1F1F1</SolidColorBrush>-->
+                <!-- Dark -->
+                <SolidColorBrush x:Key="WindowBackgroundBrush">#292929</SolidColorBrush>
+            </Style.Resources>
+        </Style>
         <StyleInclude Source="avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml" />
         <StyleInclude Source="/Controls/GroupBox.axaml" />
+        <Style Selector="controls|GroupBox">
+            <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
+        </Style>
+
         <!-- We almost always align things centrally (vertically) -->            
         <Style Selector="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
