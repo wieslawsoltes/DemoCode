@@ -37,7 +37,7 @@ namespace VDrumExplorer.ViewModel
         };
 
         internal static readonly FileFilter[] AllExplorerFiles = {
-            new FileFilter("All explorer files", new[] { "vdrum", "vkit" }),
+            new FileFilter("All explorer files", new[] { "vdrum", "vkit", "vaudio" }),
             new FileFilter("Module files", new[] { "vdrum" }),
             new FileFilter("Kit files", new[] { "vkit" }),
             new FileFilter("Audio files", new[] { "vaudio" })
