@@ -63,7 +63,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Tree of container nodes. -->
-            <TreeView Name="treeView" Grid.Column="0" BorderThickness="0" Items="{Binding Root}" SelectionChanged="TreeView_OnSelectionChanged" Margin="{StaticResource AllAroundMargin}">
+            <TreeView Name="treeView" Grid.Column="0" BorderThickness="0" Items="{Binding Root}" Margin="{StaticResource AllAroundMargin}">
                 <TreeView.ItemTemplate>
                     <TreeDataTemplate ItemsSource="{Binding Children}">
                         <TextBlock Text="{Binding Title}">

@@ -81,8 +81,8 @@
                       -->
                     <!-- TODO: Height="Auto" -->
                     <ListBox Grid.Row="1" Grid.Column="1" Margin="{StaticResource ValueMarginWithVertical}" Items="{Binding SelectedGroup.Audio}" SelectedItem="{Binding SelectedAudio}"
+                             Name="listBox"
                              VerticalAlignment="Top"
-                             SelectionChanged="SelectingItemsControl_OnSelectionChanged"
                              DoubleTapped="InputElement_OnDoubleTapped">
                         <ListBox.ItemTemplate>
                             <!-- TODO: DisplayMemberPath -->

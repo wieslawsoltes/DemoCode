@@ -3,7 +3,9 @@
 // as found in the LICENSE.txt file.
 
 using System;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using VDrumExplorer.ViewModel.Audio;
@@ -20,10 +22,15 @@ namespace VDrumExplorer.Gui
         public InstrumentAudioExplorer()
         {
             InitializeComponent();
-        }
 
-        private async void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e) =>
-            await ViewModel.PlayAudio();
+            listBox.GetObservable(SelectingItemsControl.SelectedItemProperty).Subscribe(async x =>
+            {
+                if (x is { })
+                {
+                    await ViewModel.PlayAudio();
+                }
+            });
+        }
 
         private async void InputElement_OnDoubleTapped(object? sender, RoutedEventArgs e) =>
             await ViewModel.PlayAudio();
