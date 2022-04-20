@@ -2,6 +2,7 @@
 // Use of this source code is governed by the Apache License 2.0,
 // as found in the LICENSE.txt file.
 
+using System.Text;
 using Microsoft.Win32;
 using System.Threading.Tasks;
 using VDrumExplorer.Gui.Dialogs;
@@ -21,27 +22,58 @@ namespace VDrumExplorer.Gui
         {
         }
 
-        public string? ShowOpenFileDialog(string filter)
+        private string ToFilter(FileFilter[] filters)
+        {
+            var sb = new StringBuilder();
+  
+            for (var i = 0; i < filters.Length; i++)
+            {
+                var filter = filters[i];
+                var extensions = filter.Extensions;
+ 
+                sb.Append(filter.Name);
+                sb.Append('|');
+
+                for (var j = 0; j < extensions.Length; j++)
+                {
+                    sb.Append("*.");
+                    sb.Append(extensions[j]);
+                    if (extensions.Length > 1 && j < extensions.Length - 1)
+                    {
+                        sb.Append(';');
+                    }
+                }
+
+                if (filters.Length > 1 && i < filters.Length - 1)
+                {
+                    sb.Append('|');
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        public Task<string?> ShowOpenFileDialog(FileFilter[] filter)
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
                 Multiselect = false,
-                Filter = filter
+                Filter = ToFilter(filter)
             };
-            return dialog.ShowDialog() == true ? dialog.FileName : null;
+            return Task.FromResult(dialog.ShowDialog() == true ? dialog.FileName : null);
         }
 
-        public string? ShowSaveFileDialog(string filter)
+        public Task<string?> ShowSaveFileDialog(FileFilter[] filter)
         {
-            SaveFileDialog dialog = new SaveFileDialog { Filter = filter };
-            return dialog.ShowDialog() == true ? dialog.FileName : null;
+            SaveFileDialog dialog = new SaveFileDialog { Filter = ToFilter(filter) };
+            return Task.FromResult(dialog.ShowDialog() == true ? dialog.FileName : null);
         }
 
-        public int? ChooseCopyKitTarget(CopyKitViewModel viewModel)
+        public Task<int?> ChooseCopyKitTarget(CopyKitViewModel viewModel)
         {
             var dialog = new CopyKitTargetDialog { DataContext = viewModel };
             var result = dialog.ShowDialog();
-            return result == true ? viewModel.DestinationKitNumber : default(int?);
+            return Task.FromResult(result == true ? viewModel.DestinationKitNumber : default(int?));
         }
 
         public void ShowKitExplorer(KitExplorerViewModel viewModel) =>
