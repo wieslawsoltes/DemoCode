@@ -40,7 +40,7 @@
                     <ItemsControl.DataTemplates>
                         <DataTemplate DataType="{x:Type vmls:FieldContainerNodeDetailViewModel}">
                             <controls:GroupBox Header="{Binding Description}">
-                                <ItemsControl Items="{Binding Fields}" Template="{StaticResource KeyValueTable}" />
+                                <ItemsControl Items="{Binding Fields}" ItemTemplate="{StaticResource KeyValueTable}" />
                             </controls:GroupBox>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type vmls:ListNodeDetailViewModel}">
