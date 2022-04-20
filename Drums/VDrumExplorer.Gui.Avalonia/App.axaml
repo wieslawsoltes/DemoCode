@@ -5,10 +5,6 @@
         <FluentTheme Mode="Light"/>
         <StyleInclude Source="avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml" />
         <StyleInclude Source="/Controls/GroupBox.axaml" />
-        <Style Selector="Expander">
-            <Setter Property="IsExpanded" Value="True" />
-        </Style>
-    
         <!-- We almost always align things centrally (vertically) -->            
         <Style Selector="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
