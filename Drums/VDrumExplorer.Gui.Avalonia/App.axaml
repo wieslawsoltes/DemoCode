@@ -18,6 +18,9 @@
         <Style Selector="controls|GroupBox">
             <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
         </Style>
+        <Style Selector="GridSplitter">
+            <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}" />
+        </Style>
 
         <!-- We almost always align things centrally (vertically) -->            
         <Style Selector="TextBlock">
