@@ -233,3 +233,7 @@ project.lock.json
 
 # Coderush
 .cr
+
+# JetBrains Rider
+.idea/
+*.sln.iml
