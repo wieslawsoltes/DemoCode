@@ -4,6 +4,7 @@
     <Application.Styles>
         <FluentTheme Mode="Light"/>
         <StyleInclude Source="avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml" />
+        <StyleInclude Source="/Controls/GroupBox.axaml" />
         <Style Selector="Expander">
             <Setter Property="IsExpanded" Value="True" />
         </Style>
@@ -40,6 +41,11 @@
 
     </Application.Styles>
     <Application.Resources>
+
+        <!-- Slider -->
+        <GridLength x:Key="SliderPreContentMargin">3</GridLength>
+        <GridLength x:Key="SliderPostContentMargin">3</GridLength>
+        
         <DataTemplate x:Key="KeyValueTable">
             <ItemsControl Items="{Binding Items}">
                 <ItemsControl.ItemsPanel>

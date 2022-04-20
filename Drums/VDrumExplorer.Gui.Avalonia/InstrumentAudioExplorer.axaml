@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:vmi="clr-namespace:VDrumExplorer.ViewModel.Audio;assembly=VDrumExplorer.ViewModel"
+        xmlns:controls="clr-namespace:VDrumExplorer.Gui.Controls"
         Title="{Binding Title}" Height="450" Width="800"
         Classes="WindowStyle">
     <Design.DataContext>
@@ -46,13 +47,13 @@
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Expander Grid.Column="0" Header="Instrument Groups">
+            <controls:GroupBox Grid.Column="0" Header="Instrument Groups">
                 <!-- TODO: ListView
                 <ListView ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" DisplayMemberPath="Group"/>
                 -->
-            </Expander>
+            </controls:GroupBox>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-            <Expander Grid.Column="2" Header="Instruments">
+            <controls:GroupBox Grid.Column="2" Header="Instruments">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -91,7 +92,7 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
-            </Expander>
+            </controls:GroupBox>
         </Grid>
     </DockPanel>
 </Window>

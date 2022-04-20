@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vmls="clr-namespace:VDrumExplorer.ViewModel.LogicalSchema;assembly=VDrumExplorer.ViewModel"
+        xmlns:controls="clr-namespace:VDrumExplorer.Gui.Controls"
         mc:Ignorable="d"        
         Title="{Binding Title}" Height="450" Width="800"
         Classes="WindowStyle">
@@ -31,19 +32,19 @@
         <!-- Details for the selected node. -->
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Column="2">
             <StackPanel Margin="5,0,5,0">
-                <Expander Header="Tree node">
+                <controls:GroupBox Header="Tree node">
                     <ItemsControl Items="{Binding SelectedNode.Table}" ItemTemplate="{StaticResource KeyValueTable}"/>
-                </Expander>
+                </controls:GroupBox>
                 <Separator />
                 <ItemsControl Items="{Binding SelectedNode.Details}">
                     <ItemsControl.DataTemplates>
                         <DataTemplate DataType="{x:Type vmls:FieldContainerNodeDetailViewModel}">
-                            <Expander Header="{Binding Description}">
+                            <controls:GroupBox Header="{Binding Description}">
                                 <ItemsControl Items="{Binding Fields}" Template="{StaticResource KeyValueTable}" />
-                            </Expander>
+                            </controls:GroupBox>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type vmls:ListNodeDetailViewModel}">
-                            <Expander Header="{Binding Description}">
+                            <controls:GroupBox Header="{Binding Description}">
                                 <ItemsControl Items="{Binding Items}">
                                     <ItemsControl.ItemTemplate>
                                         <!-- TODO: DisplayMemberPath -->
@@ -52,7 +53,7 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                            </Expander>
+                            </controls:GroupBox>
                         </DataTemplate>
                     </ItemsControl.DataTemplates>
                 </ItemsControl>

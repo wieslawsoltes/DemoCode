@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vmd="clr-namespace:VDrumExplorer.ViewModel.Dialogs;assembly=VDrumExplorer.ViewModel"
+        xmlns:controls="clr-namespace:VDrumExplorer.Gui.Controls"
         mc:Ignorable="d"
         Title="{Binding Title}"
         Classes="WindowStyle"
@@ -85,7 +86,7 @@
 
         </Grid>
         <Separator DockPanel.Dock="Top" />
-        <Expander Header="Progress" DockPanel.Dock="Top" Margin="6,0,6,0">
+        <controls:GroupBox Header="Progress" DockPanel.Dock="Top" Margin="6,0,6,0">
             <StackPanel DockPanel.Dock="Top" DataContext="{Binding Progress}" Margin="6" IsEnabled="{Binding ProgressEnabled}">
                 <TextBlock Text="{Binding CurrentInstrumentRecording}" Margin="0,0,0,3" />
                 <Grid>
@@ -100,7 +101,7 @@
                     </TextBlock>
                 </Grid>
             </StackPanel>
-        </Expander>
+        </controls:GroupBox>
         <StackPanel Orientation="Horizontal" Margin="6">
             <!-- Start! -->
             <Button Command="{Binding StartRecordingCommand}" Content="Start recording"/>

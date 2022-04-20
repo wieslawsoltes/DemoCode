@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:VDrumExplorer.Gui"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vmd="clr-namespace:VDrumExplorer.ViewModel.Data;assembly=VDrumExplorer.ViewModel"
+        xmlns:controls="clr-namespace:VDrumExplorer.Gui.Controls"
         mc:Ignorable="d"        
         Title="{Binding Title}" Height="450" Width="800"
         Classes="WindowStyle">
@@ -87,7 +88,7 @@
                         <ItemsControl.DataTemplates>
                             <!-- Read-only field containers -->
                             <DataTemplate DataType="{x:Type vmd:FieldContainerDataNodeDetailViewModel}">
-                                <Expander Header="{Binding Description}">
+                                <controls:GroupBox Header="{Binding Description}">
                                     <ItemsControl Items="{Binding Fields}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -167,12 +168,12 @@
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-                                </Expander>
+                                </controls:GroupBox>
                             </DataTemplate>
 
                             <!-- Lists (always read-only) -->
                             <DataTemplate DataType="{x:Type vmd:ListDataNodeDetailViewModel}">
-                                <Expander Header="{Binding Description}">
+                                <controls:GroupBox Header="{Binding Description}">
                                     <ItemsControl Items="{Binding Items}">
                                         <ItemsControl.ItemTemplate>
                                             <!-- TODO: DisplayMemberPath -->
@@ -181,7 +182,7 @@
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-                                </Expander>
+                                </controls:GroupBox>
                             </DataTemplate>
                         </ItemsControl.DataTemplates>
                     </ItemsControl>

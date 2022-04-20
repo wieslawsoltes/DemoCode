@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vmh="clr-namespace:VDrumExplorer.ViewModel.Logging;assembly=VDrumExplorer.ViewModel"
+        xmlns:controls="clr-namespace:VDrumExplorer.Gui.Controls"
         mc:Ignorable="d"
         Classes="WindowStyle"
         Title="V-Drum Explorer Home" Height="450" Width="800">
@@ -44,7 +45,7 @@
             <ComboBox Margin="{StaticResource ValueMargin}" Items="{Binding LogViewModel.AllFilterLevels}" SelectedItem="{Binding LogViewModel.FilterLevel}" />
             <Button Command="{Binding SaveLogCommand}" Margin="{StaticResource ValueMargin}" Content="Save log file"/>
         </StackPanel>
-        <Expander Header="Log" Margin="{StaticResource PanelMargin}" DockPanel.Dock="Top">
+        <controls:GroupBox Header="Log" Margin="{StaticResource PanelMargin}" DockPanel.Dock="Top">
             <ScrollViewer>
                 <ItemsControl Items="{Binding LogViewModel.LogEntries}">
                     <ItemsControl.ItemsPanel>
@@ -68,6 +69,6 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-        </Expander>
+        </controls:GroupBox>
     </DockPanel>
 </Window>
