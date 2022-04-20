@@ -1,0 +1,64 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="VDrumExplorer.Gui.App">
+    <Application.Styles>
+        <FluentTheme Mode="Light"/>
+        <Style Selector="Expander">
+            <Setter Property="IsExpanded" Value="True" />
+        </Style>
+    
+        <!-- We almost always align things centrally (vertically) -->            
+        <Style Selector="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <!-- TODO:
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                    </Trigger>
+                </Style.Triggers>
+                -->
+        </Style>
+        <Style Selector="Label">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Slider">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        
+        <StyleInclude Source="/RegularScaling.axaml" />
+        <!-- Uncomment for presentations -->
+        <!--
+        <StyleInclude Source="/PresentationScaling.xaml" />
+        -->
+
+    </Application.Styles>
+    <Application.Resources>
+        <DataTemplate x:Key="KeyValueTable">
+            <ItemsControl Items="{Binding Items}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Grid.IsSharedSizeScope="True" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="Col0" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Key}" ToolTip.Tip="{Binding KeyToolTip}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Value}" Margin="{StaticResource ValueMargin}" ToolTip.Tip="{Binding ValueToolTip}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+    </Application.Resources>
+</Application>

@@ -27,7 +27,7 @@ namespace VDrumExplorer.ViewModel.Data
         }
 
         protected override string ExplorerName =>  "Module Explorer";
-        public override string SaveFileFilter => FileFilters.ModuleFiles;
+        public override FileFilter[] SaveFileFilter => FileFilters.ModuleFiles;
 
         protected override void SaveToStream(Stream stream) => Module.Save(stream);
 
@@ -43,20 +43,20 @@ namespace VDrumExplorer.ViewModel.Data
             ViewServices.ShowKitExplorer(viewModel);
         }
 
-        private void CopyKit(DataTreeNodeViewModel kitNode)
+        private async void CopyKit(DataTreeNodeViewModel kitNode)
         {
             var kit = Module.ExportKit(kitNode.KitNumber!.Value);
             var viewModel = new CopyKitViewModel(Module, kit);
-            var destinationKitNumber = ViewServices.ChooseCopyKitTarget(viewModel);
+            var destinationKitNumber = await ViewServices.ChooseCopyKitTarget(viewModel);
             if (destinationKitNumber is int destination)
             {
                 Module.ImportKit(kit, destination);
             }
         }
 
-        private void ImportKitFromFile(DataTreeNodeViewModel kitNode)
+        private async void ImportKitFromFile(DataTreeNodeViewModel kitNode)
         {
-            string? file = ViewServices.ShowOpenFileDialog(FileFilters.KitFiles);
+            string? file = await ViewServices.ShowOpenFileDialog(FileFilters.KitFiles);
             if (file is null)
             {
                 return;
@@ -85,10 +85,10 @@ namespace VDrumExplorer.ViewModel.Data
             Module.ImportKit(kit, kitNode.KitNumber!.Value);
         }
 
-        private void ExportKit(DataTreeNodeViewModel kitNode)
+        private async void ExportKit(DataTreeNodeViewModel kitNode)
         {
             var kit = Module.ExportKit(kitNode.KitNumber!.Value);
-            var file = ViewServices.ShowSaveFileDialog(FileFilters.KitFiles);
+            var file = await ViewServices.ShowSaveFileDialog(FileFilters.KitFiles);
             if (file is null)
             {
                 return;

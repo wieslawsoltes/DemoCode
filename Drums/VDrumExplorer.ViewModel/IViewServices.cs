@@ -21,16 +21,16 @@ namespace VDrumExplorer.ViewModel
         /// </summary>
         /// <param name="filter">The filter for which files to show. See FileDialog.Filter docs for details.</param>
         /// <returns>The selected file, or null if the dialog was cancelled.</returns>
-        string? ShowOpenFileDialog(string filter);
+        Task<string?> ShowOpenFileDialog(FileFilter[] filter);
 
         /// <summary>
         /// Shows a "save file" dialog with the given filter.
         /// </summary>
         /// <param name="filter">The filter for which files to show. See FileDialog.Filter docs for details.</param>
         /// <returns>The selected file, or null if the dialog was cancelled.</returns>
-        string? ShowSaveFileDialog(string filter);
+        Task<string?> ShowSaveFileDialog(FileFilter[] filter);
 
-        int? ChooseCopyKitTarget(CopyKitViewModel viewModel);
+        Task<int?> ChooseCopyKitTarget(CopyKitViewModel viewModel);
         void ShowSchemaExplorer(ModuleSchemaViewModel viewModel);
         void ShowKitExplorer(KitExplorerViewModel viewModel);
         void ShowModuleExplorer(ModuleExplorerViewModel viewModel);

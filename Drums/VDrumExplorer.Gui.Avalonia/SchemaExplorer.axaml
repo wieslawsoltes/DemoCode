@@ -1,0 +1,62 @@
+﻿<Window x:Class="VDrumExplorer.Gui.SchemaExplorer"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vmls="clr-namespace:VDrumExplorer.ViewModel.LogicalSchema;assembly=VDrumExplorer.ViewModel"
+        mc:Ignorable="d"        
+        Title="{Binding Title}" Height="450" Width="800"
+        Classes="WindowStyle">
+    <Design.DataContext>
+        <vmls:ModuleSchemaViewModel/>
+    </Design.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        
+        <!-- Tree of container nodes. -->
+        <TreeView Name="treeView" Grid.Column="0" BorderThickness="0" Items="{Binding Root}" SelectionChanged="TreeView_OnSelectionChanged"
+                  Margin="{StaticResource AllAroundMargin}">
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Format.FormatString}" />
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+        
+        <!-- Details for the selected node. -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Column="2">
+            <StackPanel Margin="5,0,5,0">
+                <Expander Header="Tree node">
+                    <ItemsControl Items="{Binding SelectedNode.Table}" ItemTemplate="{StaticResource KeyValueTable}"/>
+                </Expander>
+                <Separator />
+                <ItemsControl Items="{Binding SelectedNode.Details}">
+                    <ItemsControl.DataTemplates>
+                        <DataTemplate DataType="{x:Type vmls:FieldContainerNodeDetailViewModel}">
+                            <Expander Header="{Binding Description}">
+                                <ItemsControl Items="{Binding Fields}" Template="{StaticResource KeyValueTable}" />
+                            </Expander>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vmls:ListNodeDetailViewModel}">
+                            <Expander Header="{Binding Description}">
+                                <ItemsControl Items="{Binding Items}">
+                                    <ItemsControl.ItemTemplate>
+                                        <!-- TODO: DisplayMemberPath -->
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding FormatString}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsControl.DataTemplates>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

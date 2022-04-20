@@ -61,7 +61,7 @@ namespace VDrumExplorer.ViewModel.Data
         public abstract ICommand ExportKitCommand { get; }
 
         protected abstract string ExplorerName { get; }
-        public abstract string SaveFileFilter { get; }
+        public abstract FileFilter[] SaveFileFilter { get; }
         protected abstract void SaveToStream(Stream stream);
         // Ugly, but simple.
         public bool IsKitExplorer => this is KitExplorerViewModel;
@@ -152,12 +152,12 @@ namespace VDrumExplorer.ViewModel.Data
 
         private void SaveFile() => SaveFileImpl(FileName);
 
-        private void SaveFileImpl(string? defaultFileName)
+        private async void SaveFileImpl(string? defaultFileName)
         {
             string? fileName = defaultFileName;
             if (fileName is null)
             {
-                fileName = ViewServices.ShowSaveFileDialog(SaveFileFilter);
+                fileName = await ViewServices.ShowSaveFileDialog(SaveFileFilter);
                 if (fileName is null)
                 {
                     return;

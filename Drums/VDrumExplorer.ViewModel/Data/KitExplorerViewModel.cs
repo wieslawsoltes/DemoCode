@@ -47,7 +47,7 @@ namespace VDrumExplorer.ViewModel.Data
         public override ICommand CopyToTemporaryStudioSetCommand { get; }
 
         protected override string ExplorerName => "Kit Explorer";
-        public override string SaveFileFilter => FileFilters.KitFiles;
+        public override FileFilter[] SaveFileFilter => FileFilters.KitFiles;
 
         protected override void SaveToStream(Stream stream) => Kit.Save(stream);
 

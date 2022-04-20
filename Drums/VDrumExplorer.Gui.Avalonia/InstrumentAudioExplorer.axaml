@@ -1,0 +1,97 @@
+﻿<Window x:Class="VDrumExplorer.Gui.InstrumentAudioExplorer"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:vmi="clr-namespace:VDrumExplorer.ViewModel.Audio;assembly=VDrumExplorer.ViewModel"
+        Title="{Binding Title}" Height="450" Width="800"
+        Classes="WindowStyle">
+    <Design.DataContext>
+        <vmi:InstrumentAudioExplorerViewModel/>
+    </Design.DataContext>
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" Margin="6">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <!-- Module ID -->
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Module:" VerticalAlignment="Center"></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ModuleName}" VerticalAlignment="Center" Margin="{StaticResource ValueMargin}"/>
+
+            <!-- Time per instrument -->
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Time per instrument (seconds):" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DurationSeconds}" VerticalAlignment="Center" Margin="{StaticResource ValueMargin}"/>
+
+            <!-- Audio format -->
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Audio format:" VerticalAlignment="Center" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding AudioFormat}" VerticalAlignment="Center" Margin="{StaticResource ValueMargin}"/>
+
+            <!-- User samples -->
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="User samples:" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding UserSampleCount}" VerticalAlignment="Center" Margin="{StaticResource ValueMargin}"/>
+        </Grid>
+        <Separator DockPanel.Dock="Top" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Expander Grid.Column="0" Header="Instrument Groups">
+                <!-- TODO: ListView
+                <ListView ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" DisplayMemberPath="Group"/>
+                -->
+            </Expander>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+            <Expander Grid.Column="2" Header="Instruments">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <!-- Output device -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Output device:"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1" Margin="{StaticResource ValueMarginWithVertical}" HorizontalAlignment="Left" Items="{Binding OutputDevices}" SelectedItem="{Binding SelectedOutputDevice}" VerticalAlignment="Center">
+                        <ComboBox.ItemTemplate>
+                            <!-- TODO: DisplayMemberPath -->
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <!-- Instruments-->
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" Text="Instruments:" />
+                    <!-- 
+                      - It would be nice to use a command here, but it's not easy to bind a command to SelectionChanged and MouseDoubleClick events.
+                      - Currently this triggers when *anything* is double clicked, too - not just the items.
+                      -->
+                    <!-- TODO: Height="Auto" -->
+                    <ListBox Grid.Row="1" Grid.Column="1" Margin="{StaticResource ValueMarginWithVertical}" Items="{Binding SelectedGroup.Audio}" SelectedItem="{Binding SelectedAudio}"
+                             VerticalAlignment="Top"
+                             SelectionChanged="SelectingItemsControl_OnSelectionChanged"
+                             DoubleTapped="InputElement_OnDoubleTapped">
+                        <ListBox.ItemTemplate>
+                            <!-- TODO: DisplayMemberPath -->
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Instrument}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Expander>
+        </Grid>
+    </DockPanel>
+</Window>

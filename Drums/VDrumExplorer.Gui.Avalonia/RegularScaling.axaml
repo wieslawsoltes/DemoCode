@@ -1,0 +1,28 @@
+﻿<!-- Resources used for defining size-sensitive data for regular developemnt; these are merged in App.xaml -->
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:VDrumExplorer.Gui">
+    <Style Selector="Window.WindowStyle">
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    <Style Selector="Menu">
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    <Style Selector="Button">
+        <Setter Property="Padding" Value="5,2" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Styles.Resources>
+        <!-- Margin to the left of a value when being displayed as a key/value pair. -->
+        <Thickness x:Key="ValueMargin">10,0,0,0</Thickness>
+        <Thickness x:Key="ValueMarginWithVertical">10,3,0,3</Thickness>
+        <Thickness x:Key="ValueMarginWithMarginAbove">10,3,0,0</Thickness>
+
+        <!-- Margin above a stack panel for vertical separation -->
+        <Thickness x:Key="PanelMargin">0,5,0,0</Thickness>
+
+        <Thickness x:Key="AllAroundMargin">5,5,5,5</Thickness>
+    </Styles.Resources>
+
+</Styles>

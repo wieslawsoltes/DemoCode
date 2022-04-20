@@ -1,0 +1,192 @@
+﻿<Window x:Class="VDrumExplorer.Gui.DataExplorer"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:VDrumExplorer.Gui"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vmd="clr-namespace:VDrumExplorer.ViewModel.Data;assembly=VDrumExplorer.ViewModel"
+        mc:Ignorable="d"        
+        Title="{Binding Title}" Height="450" Width="800"
+        Classes="WindowStyle">
+    <Design.DataContext>
+        <vmd:DataExplorerViewModel/>
+    </Design.DataContext>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <!-- It's annoying that we can't use ApplicationCommands here, but I haven't managed to make it work. -->
+                <!-- TODO: IsCheckable="False" -->
+                <MenuItem Command="{Binding SaveFileCommand}" Header="Save" />
+                <!-- TODO: IsCheckable="False" -->
+                <MenuItem Command="{Binding SaveFileAsCommand}" Header="Save As" />
+            </MenuItem>
+        </Menu>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" IsVisible="{Binding IsKitExplorer}" Margin="{StaticResource PanelMargin}">
+            <TextBlock Margin="{StaticResource ValueMargin}">Default kit number:</TextBlock>
+            <!-- , ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged -->
+            <TextBox Margin="{StaticResource ValueMargin}" Width="30" VerticalAlignment="Center" Text="{Binding DefaultKitNumber}"></TextBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="{StaticResource PanelMargin}">
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding EditCommand}">Edit mode</Button>
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding CommitCommand}">Commit changes</Button>
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding CancelEditCommand}">Cancel changes</Button>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="{StaticResource PanelMargin}">
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding CopyNodeCommand}">Copy node</Button>
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding PasteNodeCommand}">Paste node</Button>
+            <TextBlock Margin="{StaticResource ValueMargin}">Copied node path:</TextBlock>
+            <TextBlock Margin="{StaticResource ValueMargin}" Text="{Binding CopiedSnapshot.Path}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" IsVisible="{Binding DeviceViewModel.DeviceConnected}" Margin="{StaticResource PanelMargin}">
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding CopyDataToDeviceCommand}" CommandParameter="{Binding SelectedNode}" Content="{Binding CopyDataTitle}" VerticalAlignment="Center"/>
+            <TextBlock Margin="{StaticResource ValueMargin}" IsVisible="{Binding IsKitExplorer}" VerticalAlignment="Center">Kit to copy to:</TextBlock>
+            <!-- TODO: , ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged -->
+            <TextBox Margin="{StaticResource ValueMargin}" IsVisible="{Binding IsKitExplorer}" VerticalAlignment="Center" Text="{Binding KitCopyTargetNumber}" Width="30"/>
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding PlayNoteCommand}" VerticalAlignment="Center" Content="Play note"/>
+            <TextBlock Margin="{StaticResource ValueMargin}" VerticalAlignment="Center" Text="Midi Channel:"/>
+            <ComboBox Margin="{StaticResource ValueMargin}" Items="{Binding MidiChannels}" SelectedItem="{Binding SelectedMidiChannel}" VerticalAlignment="Center"/>
+            <TextBlock Margin="{StaticResource ValueMargin}" VerticalAlignment="Center" Text="Attack:"/>
+            <Slider Margin="{StaticResource ValueMargin}" Minimum="{Binding MinAttack}" Maximum="{Binding MaxAttack}" Value="{Binding Attack}" VerticalAlignment="Center" Width="100" IsSnapToTickEnabled="True" TickFrequency="1" />
+            <TextBlock Margin="{StaticResource ValueMargin}" HorizontalAlignment="Left" Text="{Binding Attack}" VerticalAlignment="Center"/>
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding CopyToTemporaryStudioSetCommand}" VerticalAlignment="Center" IsVisible="{Binding IsAerophoneKitExplorer}" Content="Test settings"/>
+        </StackPanel>
+        <Separator DockPanel.Dock="Top" Margin="{StaticResource PanelMargin}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Tree of container nodes. -->
+            <TreeView Name="treeView" Grid.Column="0" BorderThickness="0" Items="{Binding Root}" SelectionChanged="TreeView_OnSelectionChanged" Margin="{StaticResource AllAroundMargin}">
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Title}">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Open copy in Kit Explorer" Command="{Binding Root.OpenCopyInKitExplorerCommand}" CommandParameter="{Binding .}" />
+                                    <MenuItem Header="Copy to another kit" Command="{Binding Root.CopyKitCommand}" CommandParameter="{Binding .}" />
+                                    <MenuItem Header="Import from file" Command="{Binding Root.ImportKitFromFileCommand}" CommandParameter="{Binding .}" />
+                                    <MenuItem Header="Export to file" Command="{Binding Root.ExportKitCommand}" CommandParameter="{Binding .}" />
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+            <!-- Details for the selected node. -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Column="2">
+                <StackPanel Margin="5,0,5,0">
+                    <ItemsControl Items="{Binding SelectedNodeDetails}">
+                        <ItemsControl.DataTemplates>
+                            <!-- Read-only field containers -->
+                            <DataTemplate DataType="{x:Type vmd:FieldContainerDataNodeDetailViewModel}">
+                                <Expander Header="{Binding Description}">
+                                    <ItemsControl Items="{Binding Fields}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Grid.IsSharedSizeScope="True" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,3,0,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition SharedSizeGroup="Col0" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Description}" VerticalAlignment="Center" />
+                                                    <ContentControl Grid.Column="1" Content="{Binding .}" Margin="{StaticResource ValueMargin}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                        <ContentControl.DataTemplates>
+                                                            <!-- Effectively a switch on how to display a value, based on its type. -->
+                                                            <DataTemplate DataType="{x:Type vmd:ReadOnlyDataFieldViewModel}">
+                                                                <TextBlock Text="{Binding FormattedText}" />
+                                                            </DataTemplate>
+                                                            <DataTemplate DataType="{x:Type vmd:EditableEnumDataFieldViewModel}">
+                                                                <ComboBox Items="{Binding ValidValues}" SelectedItem="{Binding Value}" Margin="2" />
+                                                            </DataTemplate>
+                                                            <DataTemplate DataType="{x:Type vmd:EditableBooleanDataFieldViewModel}">
+                                                                <CheckBox IsChecked="{Binding Value}" VerticalAlignment="Center" />
+                                                            </DataTemplate>
+                                                            <DataTemplate DataType="{x:Type vmd:EditableStringDataFieldViewModel}">
+                                                                <!-- TODO: , ValidatesOnExceptions=True -->
+                                                                <TextBox Text="{Binding Text}" MaxLength="{Binding MaxLength}" MinWidth="{Binding MinWidth}"/>
+                                                            </DataTemplate>
+                                                            <DataTemplate DataType="{x:Type vmd:EditableNumericDataFieldViewModel}">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Slider Padding="0" Margin="2,1,0,0" Value="{Binding Value}" Minimum="{Binding MinValue}" Maximum="{Binding MaxValue}" Width="150" SmallChange="1" LargeChange="{Binding LargeChange}" />
+                                                                    <TextBlock Text="{Binding FormattedText}" Margin="{StaticResource ValueMargin}" />
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                            <DataTemplate DataType="{x:Type vmd:EditableInstrumentDataFieldViewModel}">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <ComboBox Items="{Binding InstrumentGroups}"
+                                                                              SelectedItem="{Binding Group}"
+                                                                              Margin="2"
+                                                                              VerticalAlignment="Center" />
+                                                                    <ComboBox Items="{Binding Group.Instruments}"
+                                                                              SelectedItem="{Binding Instrument}"
+                                                                              Margin="2"
+                                                                              IsVisible="{Binding IsPreset}"
+                                                                              VerticalAlignment="Center" />
+                                                                    <TextBlock IsVisible="{Binding IsUserSample}"
+                                                                               VerticalAlignment="Center"
+                                                                               Margin="{StaticResource ValueMargin}"
+                                                                               Text="Sample number:" />
+                                                                    <!-- Setting the width here is ugly, but we need enough for three characters -->
+                                                                    <!-- TODO: , UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True -->
+                                                                    <TextBox Text="{Binding UserSample}"
+                                                                             Width="50" 
+                                                                             IsVisible="{Binding IsUserSample}"
+                                                                             Margin="{StaticResource ValueMargin}"
+                                                                             VerticalAlignment="Center" />
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                            <DataTemplate DataType="{x:Type vmd:EditableTempoDataFieldViewModel}">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="Tempo sync" VerticalAlignment="Center"/>
+                                                                    <CheckBox IsChecked="{Binding TempoSync}" Margin="{StaticResource ValueMargin}" VerticalAlignment="Center" />
+                                                                    <ComboBox Items="{Binding ValidMusicalNoteValues}" SelectedItem="{Binding MusicalNote}" Margin="{StaticResource ValueMargin}"
+                                                                              IsVisible="{Binding TempoSync}" />
+                                                                    <Slider Padding="0" Margin="2,1,0,0" Value="{Binding NumericValue}" Minimum="{Binding MinNumericValue}" Maximum="{Binding MaxNumericValue}" Width="150" SmallChange="1" LargeChange="{Binding LargeNumericChange}"
+                                                                            IsVisible="{Binding NotTempoSync}"/>
+                                                                    <TextBlock Text="{Binding NumericFormattedText}" Margin="{StaticResource ValueMargin}"
+                                                                               IsVisible="{Binding NotTempoSync}"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+
+                                                        </ContentControl.DataTemplates>
+                                                    </ContentControl>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Expander>
+                            </DataTemplate>
+
+                            <!-- Lists (always read-only) -->
+                            <DataTemplate DataType="{x:Type vmd:ListDataNodeDetailViewModel}">
+                                <Expander Header="{Binding Description}">
+                                    <ItemsControl Items="{Binding Items}">
+                                        <ItemsControl.ItemTemplate>
+                                            <!-- TODO: DisplayMemberPath -->
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Text}"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Expander>
+                            </DataTemplate>
+                        </ItemsControl.DataTemplates>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>

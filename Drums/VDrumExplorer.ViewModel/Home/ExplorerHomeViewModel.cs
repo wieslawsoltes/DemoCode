@@ -117,9 +117,9 @@ namespace VDrumExplorer.ViewModel.Logging
             }
         }
 
-        private void SaveLog()
+        private async void SaveLog()
         {
-            var file = viewServices.ShowSaveFileDialog(FileFilters.LogFiles);
+            var file = await viewServices.ShowSaveFileDialog(FileFilters.LogFiles);
             if (file == null)
             {
                 return;
@@ -127,9 +127,9 @@ namespace VDrumExplorer.ViewModel.Logging
             LogViewModel.Save(file);
         }
 
-        private void LoadFile()
+        private async void LoadFile()
         {
-            var file = viewServices.ShowOpenFileDialog(FileFilters.AllExplorerFiles);
+            var file = await viewServices.ShowOpenFileDialog(FileFilters.AllExplorerFiles);
             if (file == null)
             {
                 return;

@@ -1,0 +1,46 @@
+﻿<Window x:Class="VDrumExplorer.Gui.Dialogs.CopyKitTargetDialog"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vmd="clr-namespace:VDrumExplorer.ViewModel.Dialogs;assembly=VDrumExplorer.ViewModel"
+        mc:Ignorable="d"
+        Title="Select Destination Kit"
+        SizeToContent="WidthAndHeight"
+        CanResize="False"
+        Classes="WindowStyle">
+    <Design.DataContext>
+        <vmd:CopyKitViewModel/>
+    </Design.DataContext>
+    <Grid Margin="6,3,0,9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" MinWidth="200" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0">Source kit:</TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="1">Destination kit number:</TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="2">Destination kit name:</TextBlock>
+
+        <TextBlock Grid.Column="1" Grid.Row="0" 
+               Margin="{StaticResource ValueMarginWithVertical}" HorizontalAlignment="Left" VerticalAlignment="Center"
+               Text="{Binding SourceKitName}" />
+        <!-- TODO: TextBox Text="{Binding DestinationKitNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" -->
+        <TextBox Grid.Column="1" Grid.Row="1"
+                 Margin="{StaticResource ValueMarginWithVertical}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="30" 
+                 Text="{Binding DestinationKitNumber}" />
+        <TextBlock Grid.Column="1" Grid.Row="2"
+               Margin="{StaticResource ValueMarginWithVertical}" HorizontalAlignment="Left" VerticalAlignment="Center"
+               Text="{Binding DestinationKitName}"/>
+
+        <UniformGrid Rows="1" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="{StaticResource PanelMargin}">
+            <Button Click="Copy" IsEnabled="{Binding CopyEnabled}" VerticalAlignment="Center">Copy</Button>
+            <Button Margin="{StaticResource ValueMargin}" Click="Cancel" VerticalAlignment="Center">Cancel</Button>
+        </UniformGrid>
+    </Grid>
+</Window>

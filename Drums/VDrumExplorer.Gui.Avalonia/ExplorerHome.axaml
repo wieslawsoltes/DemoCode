@@ -1,0 +1,73 @@
+﻿<Window x:Class="VDrumExplorer.Gui.ExplorerHome"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vmh="clr-namespace:VDrumExplorer.ViewModel.Logging;assembly=VDrumExplorer.ViewModel"
+        mc:Ignorable="d"
+        Classes="WindowStyle"
+        Title="V-Drum Explorer Home" Height="450" Width="800">
+    <Design.DataContext>
+        <vmh:ExplorerHomeViewModel/>
+    </Design.DataContext>
+    <DockPanel Margin="5">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button Command="{Binding LoadFileCommand}" Content="Load file"/>
+            <TextBlock Text="Connected device:" Margin="{StaticResource ValueMargin}" />
+            <TextBlock Text="{Binding DeviceViewModel.ConnectedDeviceName}" Margin="{StaticResource ValueMargin}"/>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="{StaticResource PanelMargin}">
+            <TextBlock Text="Known schemas:" />
+            <ComboBox Margin="{StaticResource ValueMargin}" Items="{Binding KnownSchemas}" SelectedItem="{Binding SelectedSchema}">
+                <ComboBox.ItemTemplate>
+                    <!-- TODO: DisplayMemberPath -->
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding OpenSchemaExplorerCommand}" Content="Explore" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" IsEnabled="{Binding DeviceViewModel.DeviceConnected}" Margin="{StaticResource PanelMargin}">
+            <!-- Note: primary reason for using labels instead of text blocks is that they reflect enabled state more simply. -->
+            <TextBlock Text="Device options:" />
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding LoadModuleFromDeviceCommand}" Content="Load all data"/>
+            <Button Margin="{StaticResource ValueMargin}" Command="{Binding LoadKitFromDeviceCommand}" Content="Load single kit"/>
+            <TextBlock Margin="{StaticResource ValueMargin}" Text="Kit number:"/>
+            <!-- TODO: , UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True -->
+            <TextBox Margin="{StaticResource ValueMargin}" Text="{Binding LoadKitFromDeviceNumber}" Width="30"/>
+            <Button Margin="{StaticResource ValueMargin}"  Command="{Binding RecordInstrumentAudioCommand}" Content="Record instruments" />
+        </StackPanel>
+        <Separator DockPanel.Dock="Top" Margin="{StaticResource PanelMargin}"/>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="{StaticResource PanelMargin}">
+            <TextBlock Text="Log level:"/>
+            <ComboBox Margin="{StaticResource ValueMargin}" Items="{Binding LogViewModel.AllFilterLevels}" SelectedItem="{Binding LogViewModel.FilterLevel}" />
+            <Button Command="{Binding SaveLogCommand}" Margin="{StaticResource ValueMargin}" Content="Save log file"/>
+        </StackPanel>
+        <Expander Header="Log" Margin="{StaticResource PanelMargin}" DockPanel.Dock="Top">
+            <ScrollViewer>
+                <ItemsControl Items="{Binding LogViewModel.LogEntries}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Grid.IsSharedSizeScope="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="Col0" Width="Auto" />
+                                    <ColumnDefinition SharedSizeGroup="Col1" Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Timestamp}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Level}" Margin="{StaticResource ResourceKey=ValueMargin}" />
+                                <TextBlock Grid.Column="2" Text="{Binding Text}" Margin="{StaticResource ResourceKey=ValueMargin}" ToolTip.Tip="{Binding ToolTip}" TextWrapping="Wrap"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Expander>
+    </DockPanel>
+</Window>

@@ -127,9 +127,9 @@ namespace VDrumExplorer.ViewModel.Dialogs
 
         public ICommand SelectOutputFileCommand { get; }
 
-        private void SelectOutputFile()
+        private async void SelectOutputFile()
         {
-            var file = viewServices.ShowSaveFileDialog(FileFilters.InstrumentAudioFiles);
+            var file = await viewServices.ShowSaveFileDialog(FileFilters.InstrumentAudioFiles);
             if (file != null)
             {
                 OutputFile = file;
