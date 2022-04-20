@@ -18,6 +18,8 @@ namespace VDrumExplorer.Gui
 
         public App()
         {
+            Name = "V-Drum Explorer";
+
             MidiDevices.Manager = new Midi.ManagedMidi.MidiManager();
             audioDeviceManager = new NAudioDeviceManager();
             deviceViewModel = new DeviceViewModel();
